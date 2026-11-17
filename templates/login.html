@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Ingresar · Mis Gastos{% endblock %}
+{% block body %}
+<div class="login-wrap">
+  <div class="login-card">
+    <div class="coin">💜</div>
+    <h1>Mis Gastos</h1>
+    <p class="sub">Ordena tu dinero, sin estrés.</p>
+    {% with mensajes = get_flashed_messages(with_categories=true) %}
+      {% for cat, msg in mensajes %}<div class="flash {{ cat }}">{{ msg }}</div>{% endfor %}
+    {% endwith %}
+    <form method="post">
+      <div class="field"><label for="usuario">Usuario</label>
+        <input id="usuario" name="usuario" autocomplete="username" required autofocus></div>
+      <div class="field"><label for="clave">Clave</label>
+        <input id="clave" name="clave" type="password" autocomplete="current-password" required></div>
+      <button class="btn" type="submit">Ingresar</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

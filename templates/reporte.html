@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Reporte · Mis Gastos{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Reporte de gastos</h1>
+  <p class="sub">Filtra por rango de fechas y revisa tus totales.</p>
+  <form method="get" class="filtro">
+    <div><label for="desde">Desde</label><input type="date" id="desde" name="desde" value="{{ desde }}"></div>
+    <div><label for="hasta">Hasta</label><input type="date" id="hasta" name="hasta" value="{{ hasta }}"></div>
+    <button class="btn" type="submit">Filtrar</button>
+    <a class="btn sec" href="{{ url_for('reporte') }}">Limpiar</a>
+    <button class="btn sec" type="button" onclick="window.print()">Imprimir</button>
+  </form>
+</div>
+
+<div class="kpis">
+  <div class="kpi"><small>Total</small><b>S/ {{ '%.2f'|format(total) }}</b></div>
+  <div class="kpi"><small>N.º de gastos</small><b>{{ cantidad }}</b></div>
+  <div class="kpi"><small>Promedio</small><b>S/ {{ '%.2f'|format(promedio) }}</b></div>
+  <div class="kpi"><small>Gasto mayor</small><b>{% if mayor %}S/ {{ '%.2f'|format(mayor.monto) }}{% else %}—{% endif %}</b></div>
+</div>
+
+{% if por_mes %}
+<div class="card">
+  <h2>Gasto por mes</h2>
+  {% for mes, m in por_mes.items() %}
+  <div class="bar"><span>{{ mes }}</span>
+    <div class="t"><i style="width: {{ (m / max_mes * 100)|round(0) }}%"></i></div>
+    <b class="num">S/ {{ '%.2f'|format(m) }}</b></div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<div class="card">
+  <h2>Detalle</h2>
+  <table>
+    <thead><tr><th>Fecha</th><th>Descripción</th><th class="num">Monto</th></tr></thead>
+    <tbody>
+    {% for r in filas %}
+      <tr><td>{{ r.fecha }}</td><td>{{ r.descripcion }}</td><td class="num">S/ {{ '%.2f'|format(r.monto) }}</td></tr>
+    {% else %}
+      <tr><td colspan="3" class="empty">No hay gastos en este rango.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  <div class="total"><span>Total</span><span>S/ {{ '%.2f'|format(total) }}</span></div>
+</div>
+{% endblock %}
